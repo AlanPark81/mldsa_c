@@ -13,6 +13,6 @@ set(TEST_SOURCES
         check_linkedlist.c
         check_queue.c)
 
-add_executable(check_mldsa_c ${TEST_SOURCES} main.c)
+add_executable(check_mldsa_c ${TEST_SOURCES} main.c main.h)
 find_package(Threads REQUIRED)
 target_link_libraries(check_mldsa_c mldsa_c ${CHECK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})

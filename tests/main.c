@@ -1,11 +1,7 @@
 //
 // Created by alanpark on 18. 11. 5.
 //
-#include <config.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <check.h>
-Suite * linkedlist_suite(void);
+#include "main.h"
 
 int main(void)
 {
