@@ -8,8 +8,8 @@ typedef struct ListIterator ListIterator;
 LinkedList *CreateLinkedList(size_t elem_size);
 void PushBack(LinkedList *list, void *buffer);
 void PushFront(LinkedList *list, void *buffer);
-void Front(LinkedList *list, void *buffer, size_t length);
-void Back(LinkedList *list, void *buffer, size_t length);
+bool Front(LinkedList *list, void *buffer, size_t length);
+bool Back(LinkedList *list, void *buffer, size_t length);
 void DestroyLinkedList(LinkedList *list);
 
 ListIterator* GetIterator(const LinkedList* list);
