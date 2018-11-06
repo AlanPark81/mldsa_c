@@ -75,11 +75,17 @@ START_TEST(test_LinkedList_Iterator)
             PushBack(linkedList, &data);
         }
         ListIterator* iterator = GetIterator(linkedList);
-        for ( uint32_t data = 0 ; data < 13 ; data++ ) {
+        for ( uint32_t data = 0 ; data < 12 ; data++ ) {
             uint32_t curr_data=255;
             GetCurrValue(iterator, &curr_data, sizeof(curr_data));
             ck_assert_uint_eq(curr_data, data);
             Next(iterator);
+        }
+        for ( uint32_t data = 0 ; data <13 ; data++ ) {
+            uint32_t curr_data=255;
+            GetCurrValue(iterator, &curr_data, sizeof(curr_data));
+            ck_assert_uint_eq(curr_data, 12 - data);
+            Prev(iterator);
         }
         free(iterator);
     }
