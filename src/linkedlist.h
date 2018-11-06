@@ -2,12 +2,14 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-typedef struct LinkedList LinkedList;
-typedef struct ListIterator ListIterator;
+typedef struct _LinkedList LinkedList;
+typedef struct _ListIterator ListIterator;
 
 LinkedList *CreateLinkedList(size_t elem_size);
 void PushBack(LinkedList *list, void *buffer);
 void PushFront(LinkedList *list, void *buffer);
+void PopBack(LinkedList *list, void *buffer);
+void PopFront(LinkedList *list, void *buffer);
 bool Front(LinkedList *list, void *buffer, size_t length);
 bool Back(LinkedList *list, void *buffer, size_t length);
 void DestroyLinkedList(LinkedList *list);
