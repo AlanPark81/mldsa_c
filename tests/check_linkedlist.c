@@ -6,12 +6,12 @@
 
 LinkedList *linkedList;
 
-void setup(void)
+void setup_linkedlist(void)
 {
     linkedList = CreateLinkedList(sizeof(uint32_t));
 }
 
-void teardown(void)
+void teardown_linkedlist(void)
 {
     DestroyLinkedList(linkedList);
 }
@@ -174,19 +174,19 @@ Suite * linkedlist_suite(void)
 
     /* Core test case */
     tc_init = tcase_create("Init");
-    tcase_add_checked_fixture(tc_init, setup, teardown);
+    tcase_add_checked_fixture(tc_init, setup_linkedlist, teardown_linkedlist);
     tcase_add_test(tc_init, test_LinkedList_Empty);
     suite_add_tcase(s, tc_init);
 
     /* Limits test case */
     tc_push_pop = tcase_create("PushPop");
-    tcase_add_checked_fixture(tc_push_pop, setup, teardown);
+    tcase_add_checked_fixture(tc_push_pop, setup_linkedlist, teardown_linkedlist);
     tcase_add_test(tc_push_pop, test_LinkedList_PushFront);
     tcase_add_test(tc_push_pop, test_LinkedList_PushBack);
     suite_add_tcase(s, tc_push_pop);
 
     tc_iterator = tcase_create("Iterator");
-    tcase_add_checked_fixture(tc_iterator, setup, teardown);
+    tcase_add_checked_fixture(tc_iterator, setup_linkedlist, teardown_linkedlist);
     tcase_add_test(tc_iterator, test_LinkedList_Iterator);
     tcase_add_test(tc_iterator, test_LinkedList_Iterator_insert_before);
     tcase_add_test(tc_iterator, test_LinkedList_Iterator_insert_after);

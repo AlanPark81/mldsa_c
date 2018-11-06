@@ -9,3 +9,4 @@
 #include <stdint.h>
 #include <check.h>
 Suite * linkedlist_suite(void);
+Suite * queue_suite(void);
