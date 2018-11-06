@@ -2,7 +2,6 @@
 #include <memory.h>
 #include <stdio.h>
 #include "linkedlist.h"
-typedef struct _ListNode ListNode;
 
 struct _ListNode {
     ListNode *prev;
@@ -21,11 +20,6 @@ ListNode *CreateNode(void *data_ptr, const size_t length ) {
 struct _LinkedList {
     ListNode *head;
     ListNode *tail;
-    size_t data_len;
-};
-
-struct _ListIterator{
-    ListNode* curr_node;
     size_t data_len;
 };
 
@@ -64,8 +58,8 @@ void PushFront(LinkedList *list, void *buffer) {
     }
 }
 
-void PopBack(LinkedList *list, void *buffer) {
-    if(list == NULL || list->head == NULL ) {
+void PopBack(LinkedList *list, void *buffer, const size_t length) {
+    if(list == NULL || list->head == NULL || length < list->data_len ) {
         return;
     }
 
@@ -79,8 +73,8 @@ void PopBack(LinkedList *list, void *buffer) {
     memcpy(buffer, node->data, list->data_len);
     free(node);
 }
-void PopFront(LinkedList *list, void *buffer) {
-    if(list == NULL || list->head == NULL ) {
+void PopFront(LinkedList *list, void *buffer, const size_t length) {
+    if(list == NULL || list->head == NULL || length < list->data_len ) {
         return;
     }
 
@@ -110,6 +104,62 @@ bool Back(LinkedList *list, void *buffer, size_t length) {
     return true;
 }
 
+
+bool InsertAfter(LinkedList *list, ListIterator* iterator, void *buffer) {
+    if( list == NULL || iterator == NULL || iterator->curr_node == NULL){
+        return false;
+    }
+    ListNode *next_node = iterator->curr_node->next;
+    ListNode *new_node = CreateNode(buffer, iterator->data_len);
+    new_node->prev = iterator->curr_node;
+    new_node->next = next_node;
+    iterator->curr_node->next = new_node;
+    if( next_node != NULL ) {
+        next_node->prev = new_node;
+    }
+    return true;
+}
+bool InsertBefore(LinkedList *list, ListIterator* iterator, void *buffer) {
+    if( list == NULL || iterator == NULL || iterator->curr_node == NULL){
+        return false;
+    }
+    ListNode *prev_node = iterator->curr_node->prev;
+    ListNode *new_node = CreateNode(buffer, iterator->data_len);
+    new_node->next = iterator->curr_node;
+    new_node->prev = prev_node;
+    iterator->curr_node->prev = new_node;
+    if( prev_node != NULL ) {
+        prev_node->next = new_node;
+    }
+    return true;
+}
+
+bool RemoveAt(LinkedList *linked_list, ListIterator *iterator) {
+    if(linked_list == NULL || iterator == NULL || iterator->curr_node == NULL){
+        return false;
+    }
+    ListNode* prev_node = iterator->curr_node->prev;
+    ListNode* next_node = iterator->curr_node->next;
+    if( prev_node != NULL ) {
+        prev_node->next = next_node;
+    } else {
+        linked_list->head = next_node;
+    }
+
+    if( next_node != NULL ) {
+        next_node->prev = prev_node;
+    } else {
+        linked_list->tail = prev_node;
+    }
+    free(iterator->curr_node);
+    iterator->curr_node = next_node;
+    return true;
+}
+
+bool ListEmpty(LinkedList *list) {
+    return (list == NULL || list->head == NULL );
+}
+
 void DestroyLinkedList(LinkedList *list) {
     ListNode* node = list->head;
     while( node != NULL ) {
@@ -119,10 +169,10 @@ void DestroyLinkedList(LinkedList *list) {
     free(list);
 }
 
-ListIterator* GetIterator(const LinkedList* list) {
-    ListIterator* iterator = malloc(sizeof(ListIterator));
-    iterator->curr_node = list->head;
-    iterator->data_len = list->data_len;
+ListIterator GetIterator(const LinkedList* list) {
+    ListIterator iterator;
+    iterator.curr_node = list->head;
+    iterator.data_len = list->data_len;
     return iterator;
 }
 

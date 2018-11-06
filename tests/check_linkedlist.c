@@ -19,6 +19,7 @@ void teardown(void)
 START_TEST(test_LinkedList_Empty)
 {
     uint32_t data;
+    ck_assert(ListEmpty(linkedList));
     ck_assert(!Front(linkedList, &data, sizeof(data))) ;
 }
 END_TEST
@@ -32,7 +33,7 @@ START_TEST(test_LinkedList_PushFront)
     ck_assert(Front(linkedList, &data, sizeof(data)));
     ck_assert_msg(data == 5, "front failed");
     data = 3;
-    PopFront(linkedList, &data);
+    PopFront(linkedList, &data, sizeof(data));
     ck_assert_msg(data == 5, "pop_front failed");
 
     for( uint32_t i=0 ; i < 13 ; i++) {
@@ -41,7 +42,7 @@ START_TEST(test_LinkedList_PushFront)
 
     for( uint32_t i=0 ; i < 13 ; i++) {
         uint32_t data;
-        PopBack(linkedList, &data);
+        PopBack(linkedList, &data, sizeof(data));
         ck_assert_uint_eq(data, i);
     }
 }
@@ -55,7 +56,7 @@ START_TEST(test_LinkedList_PushBack)
     ck_assert(Back(linkedList, &data, sizeof(data)));
     ck_assert(data == 5);
     data = 3;
-    PopBack(linkedList, &data);
+    PopBack(linkedList, &data, sizeof(data));
     ck_assert(data == 5);
     for( uint32_t i=0 ; i < 13 ; i++) {
         PushBack(linkedList, &i);
@@ -63,7 +64,7 @@ START_TEST(test_LinkedList_PushBack)
 
     for( uint32_t i=0 ; i < 13 ; i++) {
         uint32_t data;
-        PopFront(linkedList, &data);
+        PopFront(linkedList, &data, sizeof(data));
         ck_assert_uint_eq(data, i);
     }
 }
@@ -74,20 +75,91 @@ START_TEST(test_LinkedList_Iterator)
         for ( uint32_t data = 0 ; data < 13 ; data++ ) {
             PushBack(linkedList, &data);
         }
-        ListIterator* iterator = GetIterator(linkedList);
+        ListIterator iterator = GetIterator(linkedList);
         for ( uint32_t data = 0 ; data < 12 ; data++ ) {
             uint32_t curr_data=255;
-            GetCurrValue(iterator, &curr_data, sizeof(curr_data));
+            GetCurrValue(&iterator, &curr_data, sizeof(curr_data));
             ck_assert_uint_eq(curr_data, data);
-            Next(iterator);
+            Next(&iterator);
         }
         for ( uint32_t data = 0 ; data <13 ; data++ ) {
             uint32_t curr_data=255;
-            GetCurrValue(iterator, &curr_data, sizeof(curr_data));
+            GetCurrValue(&iterator, &curr_data, sizeof(curr_data));
             ck_assert_uint_eq(curr_data, 12 - data);
-            Prev(iterator);
+            Prev(&iterator);
         }
-        free(iterator);
+    }
+END_TEST
+
+START_TEST(test_LinkedList_Iterator_insert_before)
+    {
+        while ( !ListEmpty(linkedList)) {
+            uint32_t trash;
+            PopFront(linkedList, &trash, sizeof(trash));
+        }
+        ck_assert(ListEmpty(linkedList));
+        uint32_t data = 1;
+        PushBack(linkedList, &data);
+        data = 2;
+        ListIterator iterator = GetIterator(linkedList);
+        ck_assert(InsertBefore(linkedList, &iterator, &data));
+        ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
+        ck_assert_uint_eq(data, 1);
+        ck_assert(Prev(&iterator));
+        ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
+        ck_assert_uint_eq(data, 2);
+    }
+END_TEST
+
+START_TEST(test_LinkedList_Iterator_insert_after)
+    {
+        while ( !ListEmpty(linkedList)) {
+            uint32_t trash;
+            PopFront(linkedList, &trash, sizeof(trash));
+        }
+        ck_assert(ListEmpty(linkedList));
+        uint32_t data = 1;
+        PushBack(linkedList, &data);
+        data = 2;
+        ListIterator iterator = GetIterator(linkedList);
+        ck_assert(InsertAfter(linkedList, &iterator, &data));
+        ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
+        ck_assert_uint_eq(data, 1);
+        ck_assert(Next(&iterator));
+        ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
+        ck_assert_uint_eq(data, 2);
+    }
+END_TEST
+
+START_TEST(test_LinkedList_Iterator_remove_at)
+    {
+        while ( !ListEmpty(linkedList)) {
+            uint32_t trash;
+            PopFront(linkedList, &trash, sizeof(trash));
+        }
+        ck_assert(ListEmpty(linkedList));
+        for(uint32_t i = 0; i < 10; i++) {
+            PushBack(linkedList, &i);
+        }
+
+        ListIterator iterator = GetIterator(linkedList);
+        ck_assert(Next(&iterator));
+        ck_assert(RemoveAt(linkedList, &iterator));
+        iterator = GetIterator(linkedList);
+        ck_assert(RemoveAt(linkedList, &iterator));
+        iterator = GetIterator(linkedList);
+        uint32_t data;
+        while ( GetCurrValue(&iterator, &data, sizeof(data)) ) {
+            ck_assert_uint_ge(data, 1);
+            ck_assert(Next(&iterator));
+        }
+        iterator = GetIterator(linkedList);
+        for(uint32_t i = 2 ; i < 10 ; i++){
+            uint32_t data;
+            GetCurrValue(&iterator, &data, sizeof(data));
+            ck_assert_uint_eq(data, i);
+            Next(&iterator);
+        }
     }
 END_TEST
 
@@ -116,6 +188,9 @@ Suite * linkedlist_suite(void)
     tc_iterator = tcase_create("Iterator");
     tcase_add_checked_fixture(tc_iterator, setup, teardown);
     tcase_add_test(tc_iterator, test_LinkedList_Iterator);
+    tcase_add_test(tc_iterator, test_LinkedList_Iterator_insert_before);
+    tcase_add_test(tc_iterator, test_LinkedList_Iterator_insert_after);
+    tcase_add_test(tc_iterator, test_LinkedList_Iterator_remove_at);
     suite_add_tcase(s, tc_iterator);
 
     return s;
