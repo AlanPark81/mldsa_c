@@ -49,7 +49,7 @@ script:
     # Build main and tests
     ############################################################################
      - cd /home/travis/build/AlanPark81/mldsa_c
-     - cmake . --build .
+     - cmake .
      - make
      - ./tests/check_mldsa_c
 
