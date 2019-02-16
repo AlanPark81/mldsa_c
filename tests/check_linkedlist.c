@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <check.h>
+#include <stdio.h>
 #include "linkedlist.h"
 
 LinkedList *linkedList;
@@ -14,18 +15,17 @@ void setup_linkedlist(void)
 void teardown_linkedlist(void)
 {
     DestroyLinkedList(linkedList);
+    linkedList = NULL;
 }
 
 START_TEST(test_LinkedList_Empty)
-{
     uint32_t data;
     ck_assert(ListEmpty(linkedList));
     ck_assert(!Front(linkedList, &data, sizeof(data))) ;
-}
+    ck_assert(!Back(linkedList, &data, sizeof(data))) ;
 END_TEST
 
 START_TEST(test_LinkedList_PushFront)
-{
     uint32_t data = 5;
     ck_assert_ptr_ne(linkedList, NULL);
     PushFront(linkedList, &data);
@@ -45,11 +45,9 @@ START_TEST(test_LinkedList_PushFront)
         PopBack(linkedList, &data, sizeof(data));
         ck_assert_uint_eq(data, i);
     }
-}
 END_TEST
 
 START_TEST(test_LinkedList_PushBack)
-{
     uint32_t data = 5;
     PushBack(linkedList, &data);
     data = 3;
@@ -67,27 +65,25 @@ START_TEST(test_LinkedList_PushBack)
         PopFront(linkedList, &data, sizeof(data));
         ck_assert_uint_eq(data, i);
     }
-}
 END_TEST
 
 START_TEST(test_LinkedList_Iterator)
-    {
-        for ( uint32_t data = 0 ; data < 13 ; data++ ) {
-            PushBack(linkedList, &data);
-        }
-        ListIterator iterator = GetIterator(linkedList);
-        for ( uint32_t data = 0 ; data < 12 ; data++ ) {
-            uint32_t curr_data=255;
-            GetCurrValue(&iterator, &curr_data, sizeof(curr_data));
-            ck_assert_uint_eq(curr_data, data);
-            Next(&iterator);
-        }
-        for ( uint32_t data = 0 ; data <13 ; data++ ) {
-            uint32_t curr_data=255;
-            GetCurrValue(&iterator, &curr_data, sizeof(curr_data));
-            ck_assert_uint_eq(curr_data, 12 - data);
-            Prev(&iterator);
-        }
+    ck_assert(ListEmpty(linkedList));
+    for ( uint32_t data = 0 ; data < 3 ; data++ ) {
+        PushBack(linkedList, &data);
+    }
+    ListIterator iterator = GetIterator(linkedList);
+    for ( uint32_t data = 0 ; data < 2 ; data++ ) {
+        uint32_t curr_data=255;
+        GetCurrValue(&iterator, &curr_data, sizeof(curr_data));
+        ck_assert_uint_eq(curr_data, data);
+        Next(&iterator);
+    }
+    for ( uint32_t data = 0 ; data <3 ; data++ ) {
+        uint32_t curr_data=255;
+        GetCurrValue(&iterator, &curr_data, sizeof(curr_data));
+        ck_assert_uint_eq(curr_data, 2 - data);
+        ck_assert(Prev(&iterator));
     }
 END_TEST
 

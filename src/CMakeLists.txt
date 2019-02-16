@@ -1,11 +1,12 @@
-set(LIB_SOURCES linkedlist.c queue.c)
+set(LIB_SOURCES linkedlist.c queue.c qsort.c)
 
 set(MAIN_SOURCES main.c)
 
 set(HEADERS 
   ${CONFIG_HEADER}
         linkedlist.h
-        queue.h)
+        queue.h
+        qsort.h)
 
 add_library(mldsa_c STATIC ${LIB_SOURCES} ${HEADERS})
 

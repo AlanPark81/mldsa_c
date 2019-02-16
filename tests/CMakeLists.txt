@@ -11,7 +11,8 @@ include_directories(${CHECK_INCLUDE_DIRS})
 
 set(TEST_SOURCES
         check_linkedlist.c
-        check_queue.c)
+        check_queue.c
+        check_qsort.c)
 
 add_executable(check_mldsa_c ${TEST_SOURCES} main.c main.h)
 find_package(Threads REQUIRED)
