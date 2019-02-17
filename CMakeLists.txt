@@ -1,7 +1,9 @@
+set(CMAKE_LEGACY_CYGWIN_WIN32 0) # Remove when CMake >= 2.8.4 is required
 project(mldsa_c C)
 
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.4 FATAL_ERROR)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CODECOV_TOKEN "f19a738a-5c8f-47cb-a85a-b78ef700fce5")
 
 ###############################################################################
 # Set build features
