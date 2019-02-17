@@ -10,17 +10,17 @@ typedef struct _ListIterator{
 } ListIterator;
 
 LinkedList *CreateLinkedList(size_t elem_size);
-void PushBack(LinkedList *list, void *buffer);
-void PushFront(LinkedList *list, void *buffer);
-void PopBack(LinkedList *list, void *buffer, size_t length);
-void PopFront(LinkedList *list, void *buffer, size_t length);
+bool PushBack(LinkedList *list, void *buffer);
+bool PushFront(LinkedList *list, void *buffer);
+bool PopBack(LinkedList *list, void *buffer, size_t length);
+bool PopFront(LinkedList *list, void *buffer, size_t length);
 bool Front(LinkedList *list, void *buffer, size_t length);
 bool Back(LinkedList *list, void *buffer, size_t length);
 bool InsertAfter(LinkedList *list, ListIterator* iterator, void *buffer);
 bool InsertBefore(LinkedList *list, ListIterator* iterator, void *buffer);
 bool RemoveAt(LinkedList *linked_list, ListIterator *iterator);
 bool ListEmpty(LinkedList *list);
-void DestroyLinkedList(LinkedList *list);
+bool DestroyLinkedList(LinkedList *list);
 
 ListIterator GetIterator(const LinkedList* list);
 bool GetCurrValue(ListIterator* iterator, void *buffer, size_t length);

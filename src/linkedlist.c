@@ -30,10 +30,10 @@ LinkedList *CreateLinkedList(size_t elem_size){
     created->tail = NULL;
     return created;
 }
-void PushBack(LinkedList *list, void *buffer) {
-    if( list == NULL ) {
-        exit(1);
-    } else if ( list->head == NULL ) {
+bool PushBack(LinkedList *list, void *buffer) {
+    if (list == NULL || buffer == NULL) {
+        return false;
+    } else if (list->head == NULL) {
         list->head = CreateNode(buffer, list->data_len);
         list->tail = list->head;
     } else {
@@ -42,11 +42,12 @@ void PushBack(LinkedList *list, void *buffer) {
         list->tail->next = node;
         list->tail = list->tail->next;
     }
+    return true;
 }
 
-void PushFront(LinkedList *list, void *buffer) {
-    if( list == NULL ) {
-        exit(1);
+bool PushFront(LinkedList *list, void *buffer) {
+    if(list == NULL || buffer == NULL) {
+        return false;
     } else if ( list->head == NULL ) {
         list->head = CreateNode(buffer, list->data_len);
         list->tail = list->head;
@@ -56,11 +57,12 @@ void PushFront(LinkedList *list, void *buffer) {
         list->head->prev = node;
         list->head = list->head->prev;
     }
+    return true;
 }
 
-void PopBack(LinkedList *list, void *buffer, const size_t length) {
-    if(list == NULL || list->head == NULL || length < list->data_len ) {
-        return;
+bool PopBack(LinkedList *list, void *buffer, const size_t length) {
+    if(list == NULL || list->head == NULL || buffer==NULL || length < list->data_len ) {
+        return false;
     }
 
     ListNode* node = list->tail;
@@ -72,10 +74,11 @@ void PopBack(LinkedList *list, void *buffer, const size_t length) {
     }
     memcpy(buffer, node->data, list->data_len);
     free(node);
+    return true;
 }
-void PopFront(LinkedList *list, void *buffer, const size_t length) {
+bool PopFront(LinkedList *list, void *buffer, const size_t length) {
     if(list == NULL || list->head == NULL || length < list->data_len ) {
-        return;
+        return false;
     }
 
     ListNode* node = list->head;
@@ -87,6 +90,7 @@ void PopFront(LinkedList *list, void *buffer, const size_t length) {
     }
     memcpy(buffer, node->data, list->data_len);
     free(node);
+    return true;
 }
 
 bool Front(LinkedList *list, void *buffer, size_t length) {
@@ -106,7 +110,7 @@ bool Back(LinkedList *list, void *buffer, size_t length) {
 
 
 bool InsertAfter(LinkedList *list, ListIterator* iterator, void *buffer) {
-    if( list == NULL || iterator == NULL || iterator->curr_node == NULL){
+    if (list == NULL || iterator == NULL || buffer == NULL || iterator->curr_node == NULL){
         return false;
     }
     ListNode *next_node = iterator->curr_node->next;
@@ -120,7 +124,7 @@ bool InsertAfter(LinkedList *list, ListIterator* iterator, void *buffer) {
     return true;
 }
 bool InsertBefore(LinkedList *list, ListIterator* iterator, void *buffer) {
-    if( list == NULL || iterator == NULL || iterator->curr_node == NULL){
+    if( list == NULL || iterator == NULL || buffer == NULL || iterator->curr_node == NULL){
         return false;
     }
     ListNode *prev_node = iterator->curr_node->prev;
@@ -160,13 +164,15 @@ bool ListEmpty(LinkedList *list) {
     return (list == NULL || list->head == NULL );
 }
 
-void DestroyLinkedList(LinkedList *list) {
+bool DestroyLinkedList(LinkedList *list) {
+    if(list == NULL) return false;
     ListNode* node = list->head;
     while( node != NULL ) {
         free(node);
         node = node->next;
     }
     free(list);
+    return true;
 }
 
 ListIterator GetIterator(const LinkedList* list) {

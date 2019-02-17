@@ -20,6 +20,14 @@ void teardown_linkedlist(void)
 
 START_TEST(test_LinkedList_Empty)
     uint32_t data;
+    ck_assert(!PushBack(NULL, &data));
+    ck_assert(!PushBack(linkedList, NULL));
+    ck_assert(!PushFront(NULL, &data));
+    ck_assert(!PushFront(linkedList, NULL));
+    ck_assert(!PopBack(NULL, &data, sizeof(data)));
+    ck_assert(!PopBack(linkedList, NULL, sizeof(data)));
+    ck_assert(!PopFront(NULL, &data, sizeof(data)));
+    ck_assert(!PopFront(linkedList, NULL, sizeof(data)));
     ck_assert(ListEmpty(linkedList));
     ck_assert(!Front(linkedList, &data, sizeof(data))) ;
     ck_assert(!Back(linkedList, &data, sizeof(data))) ;
@@ -27,6 +35,7 @@ END_TEST
 
 START_TEST(test_LinkedList_PushFront)
     uint32_t data = 5;
+
     ck_assert_ptr_ne(linkedList, NULL);
     PushFront(linkedList, &data);
     data = 3;
@@ -94,6 +103,9 @@ START_TEST(test_LinkedList_Iterator_insert_before)
         PushBack(linkedList, &data);
         data = 2;
         ListIterator iterator = GetIterator(linkedList);
+        ck_assert(!InsertBefore(NULL, &iterator, &data));
+        ck_assert(!InsertBefore(linkedList, NULL, &data));
+        ck_assert(!InsertBefore(linkedList, &iterator, NULL));
         ck_assert(InsertBefore(linkedList, &iterator, &data));
         ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
         ck_assert_uint_eq(data, 1);
@@ -110,6 +122,9 @@ START_TEST(test_LinkedList_Iterator_insert_after)
         PushBack(linkedList, &data);
         data = 2;
         ListIterator iterator = GetIterator(linkedList);
+        ck_assert(!InsertAfter(NULL, &iterator, &data));
+        ck_assert(!InsertAfter(linkedList, NULL, &data));
+        ck_assert(!InsertAfter(linkedList, &iterator, NULL));
         ck_assert(InsertAfter(linkedList, &iterator, &data));
         ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
         ck_assert_uint_eq(data, 1);
