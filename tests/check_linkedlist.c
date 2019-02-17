@@ -124,7 +124,7 @@ START_TEST(test_LinkedList_Iterator_insert_before)
         ck_assert(Prev(&iterator));
         ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
         ck_assert_uint_eq(data, 2);
-
+        ck_assert(Next(&iterator));
         data = 3;
         ck_assert(InsertBefore(linkedList, &iterator, &data));
         ck_assert(Prev(&iterator));
