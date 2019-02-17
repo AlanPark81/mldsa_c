@@ -183,7 +183,7 @@ ListIterator GetIterator(const LinkedList* list) {
 }
 
 bool GetCurrValue(ListIterator* iterator, void *buffer, size_t length) {
-    if(iterator -> curr_node == NULL || length < iterator->data_len ) {
+    if(iterator == NULL || buffer == NULL || iterator -> curr_node == NULL || length < iterator->data_len ) {
         return false;
     }
     memcpy(buffer, iterator->curr_node->data, iterator->data_len);

@@ -80,11 +80,18 @@ START_TEST(test_LinkedList_Iterator)
     ck_assert(ListEmpty(linkedList));
     ck_assert(!Next(NULL));
     ck_assert(!Prev(NULL));
+    uint32_t data=255;
+    ListIterator iterator_empty = GetIterator(linkedList);
+    ck_assert(!GetCurrValue(&iterator_empty, &data, sizeof(data)));
     for ( uint32_t data = 0 ; data < 3 ; data++ ) {
         PushBack(linkedList, &data);
     }
     ListIterator iterator = GetIterator(linkedList);
     ck_assert(!Prev(&iterator));
+
+    ck_assert(!GetCurrValue(NULL, &data, sizeof(data)));
+    ck_assert(!GetCurrValue(&iterator, NULL, sizeof(data)));
+    ck_assert(!GetCurrValue(&iterator, &data, sizeof(data)) - 1);
     for ( uint32_t data = 0 ; data < 2 ; data++ ) {
         uint32_t curr_data=255;
         GetCurrValue(&iterator, &curr_data, sizeof(curr_data));
