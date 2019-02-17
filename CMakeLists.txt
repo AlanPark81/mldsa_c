@@ -3,7 +3,8 @@ project(mldsa_c C)
 
 cmake_minimum_required(VERSION 2.8.4 FATAL_ERROR)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
+SET(GCC_COVERAGE_COMPILE_FLAGS "-fprofile-arcs -ftest-coverage")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 ###############################################################################
 # Set build features
 set(CMAKE_BUILD_TYPE Debug)
