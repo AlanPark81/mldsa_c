@@ -9,7 +9,8 @@ env:
     - CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow"
     # Misc
     - RUN_TESTS=true
-    - COVERAGE=false
+    - COVERAGE=true
+    - CODECOV_TOKEN="f19a738a-5c8f-47cb-a85a-b78ef700fce5"
 
 matrix:
   include:
@@ -54,4 +55,9 @@ script:
      - ./tests/check_mldsa_c
 
 after_success:
-- codecov -t c376990f-2ad6-4f7b-bbdb-5378a52e295c -X gcov
+- lcov --capture --directory . --output-file coverage.info
+- lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter system-files
+- lcov --list coverage.info # debug info
+# Uploading report to CodeCov
+- bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage reports"
+- codecov -t f19a738a-5c8f-47cb-a85a-b78ef700fce5 -X gcov
