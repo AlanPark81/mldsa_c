@@ -1,4 +1,5 @@
 set(LIB_SOURCES linkedlist.c queue.c qsort.c)
+set(LIB_HEADERS linkedlist.h queue.h qsort.h)
 
 set(MAIN_SOURCES main.c)
 
@@ -18,4 +19,4 @@ install(TARGETS mldsa_c
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/linkedlist.h DESTINATION include)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${LIB_HEADERS} DESTINATION include/mldsa_c)
