@@ -113,6 +113,7 @@ Suite * queue_suite(void)
     tcase_add_test(tc_elements_number, test_Queue_Empty);
     tcase_add_test(tc_elements_number, test_Queue_one_element);
     tcase_add_test(tc_elements_number, test_Queue_two_elements);
+    tcase_add_test(tc_elements_number, test_Queue_three_elements);
     suite_add_tcase(s, tc_elements_number);
 
     return s;
