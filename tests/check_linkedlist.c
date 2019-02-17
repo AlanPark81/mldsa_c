@@ -117,6 +117,12 @@ START_TEST(test_LinkedList_Iterator_insert_before)
         ck_assert(Prev(&iterator));
         ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
         ck_assert_uint_eq(data, 2);
+
+        data = 3;
+        ck_assert(InsertBefore(linkedList, &iterator, &data));
+        ck_assert(Prev(&iterator));
+        ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
+        ck_assert_uint_eq(data, 3);
     }
 END_TEST
 
@@ -136,6 +142,12 @@ START_TEST(test_LinkedList_Iterator_insert_after)
         ck_assert(Next(&iterator));
         ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
         ck_assert_uint_eq(data, 2);
+        ck_assert(Prev(&iterator));
+        data = 3;
+        ck_assert(InsertAfter(linkedList, &iterator, &data));
+        ck_assert(Next(&iterator));
+        ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
+        ck_assert_uint_eq(data, 3);
     }
 END_TEST
 
