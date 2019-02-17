@@ -191,17 +191,17 @@ bool GetCurrValue(ListIterator* iterator, void *buffer, size_t length) {
 }
 
 bool Next(ListIterator* iterator) {
-    if(iterator->curr_node == NULL ) {
+    if (iterator == NULL || iterator->curr_node == NULL || iterator->curr_node->next == NULL) {
         return false;
     }
-    iterator->curr_node = iterator->curr_node->next ;
+    iterator->curr_node = iterator->curr_node->next;
     return true;
 }
 
 bool Prev(ListIterator* iterator) {
-    if(iterator->curr_node == NULL ) {
+    if (iterator == NULL || iterator->curr_node == NULL || iterator->curr_node->prev == NULL) {
         return false;
     }
-    iterator->curr_node = iterator->curr_node->prev ;
+    iterator->curr_node = iterator->curr_node->prev;
     return true;
 }

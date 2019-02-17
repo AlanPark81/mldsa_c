@@ -78,22 +78,27 @@ END_TEST
 
 START_TEST(test_LinkedList_Iterator)
     ck_assert(ListEmpty(linkedList));
+    ck_assert(!Next(NULL));
+    ck_assert(!Prev(NULL));
     for ( uint32_t data = 0 ; data < 3 ; data++ ) {
         PushBack(linkedList, &data);
     }
     ListIterator iterator = GetIterator(linkedList);
+    ck_assert(!Prev(&iterator));
     for ( uint32_t data = 0 ; data < 2 ; data++ ) {
         uint32_t curr_data=255;
         GetCurrValue(&iterator, &curr_data, sizeof(curr_data));
         ck_assert_uint_eq(curr_data, data);
         Next(&iterator);
     }
+    ck_assert(!Next(&iterator));
     for ( uint32_t data = 0 ; data <3 ; data++ ) {
         uint32_t curr_data=255;
         GetCurrValue(&iterator, &curr_data, sizeof(curr_data));
         ck_assert_uint_eq(curr_data, 2 - data);
-        ck_assert(Prev(&iterator));
+        Prev(&iterator);
     }
+    ck_assert(!Prev(&iterator));
 END_TEST
 
 START_TEST(test_LinkedList_Iterator_insert_before)
@@ -137,6 +142,8 @@ END_TEST
 START_TEST(test_LinkedList_Iterator_remove_at)
     {
         ck_assert(ListEmpty(linkedList));
+        ListIterator iterator_empty = GetIterator(linkedList);
+        ck_assert(!RemoveAt(linkedList, &iterator_empty));
         for(uint32_t i = 0; i < 10; i++) {
             PushBack(linkedList, &i);
         }
@@ -144,14 +151,16 @@ START_TEST(test_LinkedList_Iterator_remove_at)
         ListIterator iterator = GetIterator(linkedList);
         ck_assert(Next(&iterator));
         ck_assert(RemoveAt(linkedList, &iterator));
+        ck_assert(!RemoveAt(linkedList, NULL));
+        ck_assert(!RemoveAt(NULL, &iterator));
         iterator = GetIterator(linkedList);
         ck_assert(RemoveAt(linkedList, &iterator));
         iterator = GetIterator(linkedList);
         uint32_t data;
-        while ( GetCurrValue(&iterator, &data, sizeof(data)) ) {
+        do {
+            ck_assert(GetCurrValue(&iterator, &data, sizeof(data)));
             ck_assert_uint_ge(data, 1);
-            ck_assert(Next(&iterator));
-        }
+        } while(Next(&iterator));
         iterator = GetIterator(linkedList);
         for(uint32_t i = 2 ; i < 10 ; i++){
             uint32_t data;
@@ -159,6 +168,8 @@ START_TEST(test_LinkedList_Iterator_remove_at)
             ck_assert_uint_eq(data, i);
             Next(&iterator);
         }
+        while (Next(&iterator));
+        ck_assert(RemoveAt(linkedList, &iterator));
     }
 END_TEST
 
