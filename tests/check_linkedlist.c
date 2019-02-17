@@ -89,10 +89,6 @@ END_TEST
 
 START_TEST(test_LinkedList_Iterator_insert_before)
     {
-        while ( !ListEmpty(linkedList)) {
-            uint32_t trash;
-            PopFront(linkedList, &trash, sizeof(trash));
-        }
         ck_assert(ListEmpty(linkedList));
         uint32_t data = 1;
         PushBack(linkedList, &data);
@@ -109,10 +105,6 @@ END_TEST
 
 START_TEST(test_LinkedList_Iterator_insert_after)
     {
-        while ( !ListEmpty(linkedList)) {
-            uint32_t trash;
-            PopFront(linkedList, &trash, sizeof(trash));
-        }
         ck_assert(ListEmpty(linkedList));
         uint32_t data = 1;
         PushBack(linkedList, &data);
@@ -129,10 +121,6 @@ END_TEST
 
 START_TEST(test_LinkedList_Iterator_remove_at)
     {
-        while ( !ListEmpty(linkedList)) {
-            uint32_t trash;
-            PopFront(linkedList, &trash, sizeof(trash));
-        }
         ck_assert(ListEmpty(linkedList));
         for(uint32_t i = 0; i < 10; i++) {
             PushBack(linkedList, &i);
